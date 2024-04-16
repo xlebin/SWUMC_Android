@@ -1,0 +1,76 @@
+package com.example.umc01
+
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.example.umc01.databinding.ActivityMainBinding
+
+class MainActivity : AppCompatActivity() {
+    companion object {
+        const val STRING_INTENT_KEY = "my_string_key"
+    }
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // HomeFragment를 기본 프래그먼트로 설정
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, HomeFragment())
+                .commit()
+        }
+
+        // ActivityResultLauncher 초기화
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val returnString = result.data?.getStringExtra(STRING_INTENT_KEY)
+                Toast.makeText(this, returnString ?: "No data", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val song = Song(binding.mainMiniplayerTitleTv.text.toString(), binding.mainMiniplayerSingerTv.text.toString())
+
+
+        binding.mainPlayerCl.setOnClickListener {
+            val intent = Intent(this, SongActivity::class.java).apply {
+                putExtra("title", song.title)
+                putExtra("singer", song.singer)
+                putExtra("albumImage", R.drawable.img_album_exp3)
+                putExtra("lyrics01", "늘 뻔한 recipe")
+                putExtra("lyrics02", "착한 아이처럼")
+            }
+            resultLauncher.launch(intent)
+        }
+
+        initBottomNavigation()
+    }
+
+    private fun initBottomNavigation() {
+        binding.mainBnv.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.homeFragment -> replaceFragment(HomeFragment())
+                R.id.lookFragment -> replaceFragment(LookFragment())
+                R.id.searchFragment -> replaceFragment(SearchFragment())
+                R.id.lockerFragment -> replaceFragment(LockerFragment())
+                else -> false
+            }
+        }
+    }
+
+    private fun replaceFragment(fragment: Fragment): Boolean {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, fragment)
+            .commitAllowingStateLoss()
+        return true
+    }
+}
