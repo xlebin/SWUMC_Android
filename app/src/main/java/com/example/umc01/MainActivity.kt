@@ -3,6 +3,9 @@ package com.example.umc01
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,6 +23,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Log.d("MainActivity", "Current theme before setting content view: " + resources.getResourceEntryName(R.style.SplashTheme))
+        //setTheme(R.style.Theme_UMC01)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -38,21 +43,28 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val song = Song(binding.mainMiniplayerTitleTv.text.toString(), binding.mainMiniplayerSingerTv.text.toString())
+        val song = Song(binding.mainMiniplayerTitleTv.text.toString(), binding.mainMiniplayerSingerTv.text.toString(),0,60,false)
 
 
         binding.mainPlayerCl.setOnClickListener {
             val intent = Intent(this, SongActivity::class.java).apply {
                 putExtra("title", song.title)
                 putExtra("singer", song.singer)
-                putExtra("albumImage", R.drawable.img_album_exp3)
-                putExtra("lyrics01", "늘 뻔한 recipe")
-                putExtra("lyrics02", "착한 아이처럼")
+//                putExtra("albumImage", R.drawable.img_album_exp3)
+//                putExtra("lyrics01", "늘 뻔한 recipe")
+//                putExtra("lyrics02", "착한 아이처럼")
+
+                //타이머 구현 위한 데이터 전달
+                putExtra("second", song.second)
+                putExtra("playTime", song.playTime)
+                putExtra("isPlaying", song.isPlaying)
             }
             resultLauncher.launch(intent)
         }
 
         initBottomNavigation()
+
+
     }
 
     private fun initBottomNavigation() {
