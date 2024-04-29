@@ -57,7 +57,7 @@
                     android:id="@+id/main_miniplayer_title_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SugarCoat"
+                    android:text="라일락"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -66,7 +66,7 @@
                     android:id="@+id/main_miniplayer_singer_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="KISS OF LIFE(NATTY SOLO)"
+                    android:text="아이유(IU)"
                     android:textSize="12sp" />
 
             </LinearLayout>
