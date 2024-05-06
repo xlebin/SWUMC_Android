@@ -1,7 +1,10 @@
 package com.example.umc01
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,6 +17,7 @@ import androidx.fragment.app.Fragment
 import com.example.umc01.databinding.ActivityMainBinding
 import com.google.gson.Gson
 
+
 class MainActivity : AppCompatActivity() {
     companion object {
         const val STRING_INTENT_KEY = "my_string_key"
@@ -25,10 +29,10 @@ class MainActivity : AppCompatActivity() {
     private var gson: Gson = Gson()
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //Log.d("MainActivity", "Current theme before setting content view: " + resources.getResourceEntryName(R.style.SplashTheme))
-        //setTheme(R.style.Theme_UMC01)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -54,9 +58,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SongActivity::class.java).apply {
                 putExtra("title", song.title)
                 putExtra("singer", song.singer)
-//                putExtra("albumImage", R.drawable.img_album_exp3)
-//                putExtra("lyrics01", "늘 뻔한 recipe")
-//                putExtra("lyrics02", "착한 아이처럼")
 
                 //타이머 구현 위한 데이터 전달
                 putExtra("second", song.second)
@@ -96,6 +97,42 @@ class MainActivity : AppCompatActivity() {
         binding.mainMiniplayerSingerTv.text = song.singer
         binding.mainMiniplayerProgressSb.progress = (song.second * 100000)/song.playTime
     }
+
+//    // MainActivity 클래스에 MediaPlayer 멤버 변수 추가
+//    private var mediaPlayer: MediaPlayer? = null
+//
+//    // 노래를 재생하는 함수 추가
+//    private fun playSong(context: Context, songUri: Uri) {
+//        // 기존에 재생 중인 노래가 있다면 정지하고 MediaPlayer를 해제합니다.
+//        mediaPlayer?.release()
+//
+//        // MediaPlayer 초기화 및 노래 재생
+//        mediaPlayer = MediaPlayer().apply {
+//            setDataSource(context, songUri)
+//            prepare()
+//            start()
+//        }
+//    }
+//
+//    // 앨범 정보를 기반으로 노래 파일의 URI를 가져오는 함수
+//    private fun getSongUri(album: Album): Uri {
+//        // 앨범 정보를 기반으로 노래 파일의 파일명을 생성
+//        val songFileName = "${album.title}_${album.singer}.mp3"
+//
+//        // 앱의 리소스로 제공된 raw 리소스의 URI를 생성
+//        return Uri.parse("android.resource://" + packageName + "/raw/" + songFileName)
+//    }
+
+    fun updateMiniPlayer(album: Album) {
+        // 미니플레이어 업데이트 코드를 여기에 추가
+        binding.mainMiniplayerTitleTv.text = album.title
+        binding.mainMiniplayerSingerTv.text = album.singer
+
+//        // 노래를 재생하고 싶은 URI를 가져와서 노래를 재생합니다.
+//        val songUri = getSongUri(album) // 노래의 URI를 가져오는 함수가 필요합니다.
+//        playSong(context, songUri)
+    }
+
     override fun onStart() {
         super.onStart()
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
